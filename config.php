@@ -33,8 +33,7 @@ define('CLASSES_PATH', ROOT . CLASSES_DIR);
 
 define('LANGUAGE_DIR', 'lang/');
 define('LANGUAGE_PATH', ROOT . LANGUAGE_DIR);
-//define('DEFAULT_LANG', 'en_US');
-define('DEFAULT_LANG', 'fr_FR');
+define('DEFAULT_LANG', 'en_US');
 
 /*
  * Themes

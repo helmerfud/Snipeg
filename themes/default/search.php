@@ -1,140 +1,91 @@
 <?php include('header.php'); ?>
 
 <?php include('top.php'); ?>
-
 		<div id="main" class="container_12">
-
-			<form method="get" action="" id="search" class="prefix_3 grid_6" autocomplete="off">
-
+			<div id="single" class="grid_7">
+			<form method="get" action="" id="search" autocomplete="off">
 				<input type="hidden" name="action" value="search" />
-
 				<input type="text" name="query" id="query" value="<?php remind_get('query'); ?>" autofocus />
-
 				<input type="submit" value="<?php echo $Lang->searchbutton; ?>" />
-
 				<div class="clear"></div>
-
 				<div class="alpha grid_6">
-
 					<input type="checkbox" id="filterByCategory" />
-
 					<label id="category-label" for="filterByCategory" ><?php echo $Lang->categoryfilter;?></label>
-
 					<select name="category" id="category">
-
 						<?php foreach( $Categories as $cat ) : ?>
 						<option value="<?php echo htmlspecialchars( $cat );?>"><?php echo ucfirst( htmlspecialchars( $cat ) );?></option>
 						<?php endforeach; ?>
-
 					</select>
-
 				</div>
-
 			</form>
-
+			</div>
+			<div class="grid_5">
+				<div class="tags">
+					<?php
+						$arrTags = SnippetsManager::getAllTags();
+						if(!empty($arrTags))
+						{
+							foreach($arrTags as $utag)
+							{
+								echo "<a href=\"?action=browse&tags=$utag\">$utag </a>";
+							}
+						}
+						
+					?>
+				</div>
+			</div>
 		</div>
-
 		<div class="container_12">
-
 			<div id="search-head">
-
 				<?php if(!empty($_GET['query'])) : ?>
-
 				<h1><?php echo $Lang->resultsfor;?> : <?php echo htmlspecialchars($_GET['query']); ?></h1>
-
 				<?php endif; ?>
-
 				<?php if(is_array($Snippets) AND !empty($Snippets)) : ?>
-
 				<?php foreach($Snippets AS $snippet) : ?>
-
 				<div class="result-line">
-
 					<div class="grid_7">
-
 						<h4><a href="?action=single&id=<?php echo htmlspecialchars($snippet->id); ?>"><?php echo htmlspecialchars($snippet->name); ?></a></h4>
-
 						<p><?php echo Tool::linkify(htmlspecialchars($snippet->comment)); ?></p>
-
 						<p><?php echo $Lang->publishedbyview . ' ' . htmlspecialchars($snippet->owner) . ' ' . $Lang->publisheddatebrowse . ' ' . date('M d Y', $snippet->lastUpdate) . ' ' . $Lang->categorybrowse ; ?> <a href="?action=browse&category=<?php echo htmlspecialchars($snippet->category); ?>"><?php echo htmlspecialchars(ucfirst($snippet->category)); ?></a></p>
 					</div>
-
 					<div class="prefix_1 grid_4">
-
 						<div class="tags">
-
 							<?php if(!empty($snippet->tags)) : ?>
-
 							<?php foreach($snippet->tags as $tag) : ?>
-
 							<a href="?action=browse&tags=<?php echo htmlspecialchars($tag); ?>"><?php echo htmlspecialchars(ucfirst($tag)); ?></a>
-
 							<?php endforeach; ?>
-
 							<?php endif; ?>
-
 						</div>
-
 					</div>
-
 				</div>
-
 				<?php endforeach; ?>
-
 				<?php endif; ?>
-
 			</div>
-
 			<div id="contents">
-
 				<div id="results"></div>
-
 				<div class="clear"></div>
-
 				<div id="paging">
-
 					<?php if(!empty($Pages)) : ?>
-
 					<?php if ( isset( $_GET['query'] ) ) : ?>
-
 						<a href="?action=search&query=<?php echo htmlspecialchars( $_GET['query'] ); ?>&page=1"><?php echo $Lang->first; ?></a>
-
 						<?php foreach($Pages AS $key => $numPage) : ?>
-
 							<?php if($key < count($Pages) - 1) : ?>
-
 								<a href="?action=search&query=<?php echo htmlspecialchars( $_GET['query'] ); ?>&page=<?php echo $numPage; ?>"><?php echo $numPage ?></a>
-
 							<?php endif; ?>
-
 						<?php endforeach; ?>
-
 						<a href="?action=search&query=<?php echo htmlspecialchars( $_GET['query'] ); ?>&page=<?php echo end($Pages); ?>"><?php echo $Lang->last; ?></a>
-
 					<?php elseif ( isset( $_GET['category'] ) ) : ?>
-
 						<a href="?action=search&category=<?php echo htmlspecialchars( $_GET['category'] ); ?>&page=1"><?php echo $Lang->first; ?></a>
-
 						<?php foreach($Pages AS $key => $numPage) : ?>
-
 							<?php if($key < count($Pages) - 1) : ?>
-
 								<a href="?action=search&category=<?php echo htmlspecialchars( $_GET['category'] ); ?>&page=<?php echo $numPage; ?>"><?php echo $numPage ?></a>
-
 							<?php endif; ?>
-
 						<?php endforeach; ?>
-
 						<a href="?action=search&category=<?php echo htmlspecialchars( $_GET['category'] ); ?>&page=<?php echo end($Pages); ?>"><?php echo $Lang->last; ?></a>
-
 					<?php endif; ?>
-
 					<?php endif; ?>
-
 				</div>
-
 			</div>
-
 		</div>
 
 		<script type="text/javascript">

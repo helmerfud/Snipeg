@@ -230,6 +230,38 @@ class SnippetsManager {
 		}
 
 	}
+	public function getAllTags() {
+		try 
+		{
+			$strTags = '';
+			$tagsArray = array();
+			
+			$db = PDOSQLite::getDBLink();
+			$request = $db->prepare('SELECT tags FROM snippets');
+			$request->execute();
+			
+			while($result = $request->fetch(PDO::FETCH_ASSOC)) 
+			{
+				$strTags .= ', '.$result['tags'];
+			}
+			$strTags = substr($strTags, 2);
+			$tagsArray = preg_split("/, ?/", $strTags);
+			$arrtagsC = array_count_values($tagsArray);
+			arsort($arrtagsC);
+			$i=0;$arrTagCloud= array();
+			while (list($key, $value) = each($arrtagsC) and $i < 10)
+			{
+				$arrTagCloud[] = $key;
+				$i++;
+			}
+			return array_unique($arrTagCloud);
+		}
+		catch(Exception $e) 
+		{
+			return array();
+		}
+
+	}
 
 	public function instantSearch_countOfSnippets( $userId, $query, $category = false ) {
 
