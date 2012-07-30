@@ -230,6 +230,7 @@ class SnippetsManager {
 		}
 
 	}
+	
 	public function getAllTags() {
 		try 
 		{
@@ -239,16 +240,23 @@ class SnippetsManager {
 			$db = PDOSQLite::getDBLink();
 			$request = $db->prepare('SELECT tags FROM snippets');
 			$request->execute();
-			
+
+			//doing long string with all tags
 			while($result = $request->fetch(PDO::FETCH_ASSOC)) 
 			{
 				$strTags .= ', '.$result['tags'];
 			}
+			//cut char ', '
 			$strTags = substr($strTags, 2);
+			//make new array of all individual tags
 			$tagsArray = preg_split("/, ?/", $strTags);
+			//make new array with all tags with the count of each in the $tagArray
 			$arrtagsC = array_count_values($tagsArray);
+			//sorting by keys reverse order
 			arsort($arrtagsC);
-			$i=0;$arrTagCloud= array();
+			$i=0;
+			$arrTagCloud= array();
+			//Extract the 10 most used tags
 			while (list($key, $value) = each($arrtagsC) and $i < 10)
 			{
 				$arrTagCloud[] = $key;
